@@ -35,7 +35,7 @@
                             <input type="checkbox"> 我遵守准则
                         </label>
                     </div>
-                    <button type="submit" id="buttt" class="btn btn-default">注册</button>
+                    <button type="submit" id="butt" class="btn btn-default">注册</button>
                 </form>
             </div>
 
@@ -48,20 +48,35 @@
             $('#username').keyup(() => {
                 let fields = {
                     username: $('#username').val(),
-                    password: $('#password').val()
+                    password: $('#password').val(),
+                    event: 'checkUser'
                 };
-                $.post('/doRegister', fields, (data) => {
+                $.post('/checkUser', fields, (data) => {
                     console.log(data);
                     if (data == 1) {
                         $('#checkUsername').html('用户名已被占用');
-                        $('#username').parent().addClass('has-error')
+                        $('#username').parent().addClass('has-error');
                     } else if (data == -1) {
-                        $('#checkUsername').html('用户名可以使用')
+                        console.log(data)
+                        $('#username').parent().removeClass('has-error');
+                        $('#checkUsername').html('用户名可以使用');
                     }
                 })
             });
-
-
+            $('#butt').click(() => {
+                let fields = {
+                    username: $('#username').val(),
+                    password: $('#password').val(),
+                    event: 'doRegister'
+                };
+                $.post('doRegister', fields, (data) => {
+                    if (data == 'ok') {
+                        alert('注册成功');
+                        window.location = '/'
+                        console.log(data)
+                    }
+                })
+            })
         </script>
 
 </body>

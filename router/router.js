@@ -7,60 +7,58 @@ let Schema = mongoose.Schema({
 });
 let Model = mongoose.model("users", Schema);
 module.exports.showIndex = (req, res, next) => {
-    res.render('index')
+    if (req.session.login == '1') {
+        var username = req.session.username;
+        var login = true;
+    } else {
+        var username = 'nonde';
+        var login = false;
+    }
+    res.render('index', {
+        login: login,
+        username: username
+    })
 };
 module.exports.showRegister = (req, res, next) => {
     res.render('register')
 }
 module.exports.doRegister = (req, res, next) => {
-    // Model.find({
-    //     'username': 'fuqiang'
-    // }, (err, data) => {
-    //     if (err) console.log('not find username');
-    //     console.log(data);
-    //     res.send('ssss')
-    // });
+    var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields, files) {
+        // 注册事件；插入users
+        var small = new Model({
+            username: fields.username,
+            password: fields.password
+        });
+        //使用实例创建
+        small.save(function (err) {
+            if (err) {
+                console.log('注册失败');
+                res.send('no');
+            }
+            // saved!
+            req.session.login = '1';
+            req.session.username = fields.username
+            res.send('ok')
+        })
+    })
+};
 
-
-
-
-
-
+module.exports.checkUser = (req, res, next) => {
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
         // fields.username
-        console.log(fields)
+        // console.log(fields)
         Model.find({
             'username': fields.username
         }, (err, data) => {
             if (err) console.log('not find username');
-            console.log(data);
+            // console.log(data);
             if (data[0]) {
-                res.send('1')
+                res.send('1'); //用户名重复
             } else {
                 res.send('-1')
             }
         });
     });
-
-
-
-
-    //继承一个schema
-    //生成一个document
-    // let apple = new Model({
-    //     username: 'apple',
-    //     password: 'apple'
-    // });
-    //存放数据
-    // apple.save((err, apple) => {
-    //     if (err) return console.log(err);
-    //     //查找数据
-    //     Model.find({
-    //         name: 'apple'
-    //     }, (err, data) => {
-    //         console.log(data);
-    //     });
-    //     res.send('ssss')
-    // });
 }
