@@ -8,23 +8,23 @@
     <title>Document</title>
     <link rel="stylesheet" href="/css/bootstrap.css">
     <style>
-        .register {
+        .login {
             margin-top: 110px;
         }
     </style>
 </head>
 
 <body>
+    <!-- header -->
     <%- include('header.ejs')%>
-
-        <div class="container register ">
+        <!-- login  -->
+        <div class="container login ">
             <div class="row">
                 <form class="col-sm-6 col-sm-offset-3">
-                    <h2>欢迎注册 ！</h2>
+                    <h2>请登录 ！</h2>
                     <div class="form-group ">
                         <label for="username">用户名</label>
                         <input type="text" class="form-control " id="username" placeholder="用户名，可以是中文，不能和别人重复">
-                        <span id="checkUsername"></span>
                     </div>
                     <div class="form-group">
                         <label for="password">密码</label>
@@ -32,54 +32,40 @@
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox"> 我遵守准则
+                            <input type="checkbox"> 10天内免登陆
                         </label>
                     </div>
-                    <button type="submit" id="butt" class="btn btn-default">注册</button>
+                    <button type="submit" id="butt" class="btn btn-default">登录</button>
                 </form>
             </div>
 
         </div>
 
+
         <script src="/js/jquery-3.2.1.js"></script>
         <script src="/js/bootstrap.js"></script>
         <script>
-            // 校验用户名  checkUser
-            $('#username').keyup(() => {
-                let fields = {
-                    username: $('#username').val(),
-                    password: $('#password').val(),
-                    event: 'checkUser'
-                };
-                $.post('/checkUser', fields, (data) => {
-                    console.log(data);
-                    if (data == 1) {
-                        $('#checkUsername').html('用户名已被占用');
-                        $('#username').parent().addClass('has-error');
-                    } else if (data == -1) {
-                        console.log(data)
-                        $('#username').parent().removeClass('has-error');
-                        $('#checkUsername').html('用户名可以使用');
-                    }
-                })
-            });
-
-            // 执行注册功能  doRegister
             $('#butt').click(() => {
                 let fields = {
                     username: $('#username').val(),
                     password: $('#password').val(),
-                    event: 'doRegister'
+                    event: 'doLogin'
                 };
-                $.post('/doRegister', fields, (data) => {
-                    if (data == 'ok') {
-                        alert('注册成功');
+                $.post('/dologin', fields, (data) => {
+                    console.log(data)
+                    if (data == '1') {
+                        alert('登录成功，将跳转到首页');
                         window.location = '/'
-                        console.log(data)
+                    } else {
+                        alert('账号或者密码输入错误，请重新输入');
+
                     }
                 })
             })
         </script>
+
+
+
 
 </body>
 

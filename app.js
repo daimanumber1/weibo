@@ -9,10 +9,17 @@ app.use(session({
 }))
 
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.use(express.static('./public'));
+app.use("/avatar",express.static("./avatar"));
+
 //////////////////////
 app.get('/', router.showIndex);
 app.get('/register', router.showRegister); //显示注册页面
-app.post('/doRegister', router.doRegister);
-app.post('/checkUser', router.checkUser);
+app.post('/doRegister', router.doRegister);  //执行注册（）
+app.post('/checkUser', router.checkUser);  // 注册时检验username是否重复 （ajax操作）
+/////
+app.get('/login',router.showLogin);   // 显示登陆页面
+app.post('/doLogin',router.doLogin); //    执行登录
+////
+app.post('/publish',router.publish);
 app.listen(8080)
