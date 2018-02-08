@@ -18,13 +18,20 @@ module.exports.showIndex = (req, res, next) => {
     } else {
         var username = '';
         var login = false;
-    }
-    // console.log(login + username);
-    res.render('index', {
-        login: login,
-        username: username
+    };
+    Comm.find({}).sort({
+        '_id': -1
+    }).exec((err, data) => {
+        console.log(data);
+        res.render('index', {
+            login: login,
+            username: username,
+            comments: data
 
+        })
     })
+    // console.log(login + username);
+
 };
 module.exports.showRegister = (req, res, next) => {
     res.render('register', {
@@ -105,12 +112,12 @@ module.exports.publish = (req, res, next) => {
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
         // fields.username
-        console.log(fields);
+        // console.log(fields);
         var small = new Comm({
             username: req.session.username,
             content: fields.content
         });
-        console.log(req.session.username+fields.content)
+        // console.log(req.session.username + fields.content)
         //使用实例创建
         small.save(function (err) {
             if (err) {
@@ -122,5 +129,17 @@ module.exports.publish = (req, res, next) => {
         })
 
     });
+
+};
+
+// logOut
+module.exports.logOut = (req, res, next) => {
+    req.session.login = '0';
+    req.session.username = '';
+    res.render('index', {
+        login: false,
+        username: ''
+
+    })
 
 }

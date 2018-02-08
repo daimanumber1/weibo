@@ -21,5 +21,6 @@ app.post('/checkUser', router.checkUser);  // 注册时检验username是否重�
 app.get('/login',router.showLogin);   // 显示登陆页面
 app.post('/doLogin',router.doLogin); //    执行登录
 ////
-app.post('/publish',router.publish);
+app.post('/publish',router.publish);  //发表说说
+app.get('/logOut',router.logOut);   // 注销
 app.listen(8080)

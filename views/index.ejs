@@ -46,14 +46,18 @@
                     </ul>
                 </nav>
                 <!-- 评论 -->
-                <div>
-                    <div col-sm-6>
-                        <h2>
-                            <img src="/avatar/123123.jpg " width="50px" class="img-circle">
-                            <%= username %> 评论:</h2>
-                        <p>dddddddddddddddd</p>
+                <% for(let i =0;i<comments.length;i++) {%>
+                    <div>
+                        <div col-sm-6>
+                            <h2>
+                                <img src="/avatar/123123.jpg " width="50px" class="img-circle">
+                                <%= comments[i].username %> 评论:</h2>
+                            <p>
+                                <%= comments[i].content %>
+                            </p>
+                        </div>
                     </div>
-                </div>
+                    <% } %>
             </div>
 
             <% }else {%>
@@ -78,7 +82,7 @@
                                         <label for="password">密码</label>
                                         <input type="password" class="form-control" id="password" placeholder="密码，至少6位">
                                     </div>
-                                    <button type="submit" class="btn btn-default">登录</button>
+                                    <button type="submit" id="butt" class="btn btn-default">登录</button>
                                 </form>
                             </div>
                         </div>
@@ -106,6 +110,24 @@
                                     alert('说说发表成功');
                                 }
 
+                            })
+                        })
+                        //登录
+                        $('#butt').click(() => {
+                            let fields = {
+                                username: $('#username').val(),
+                                password: $('#password').val(),
+                                event: 'doLogin'
+                            };
+                            $.post('/dologin', fields, (data) => {
+                                console.log(data)
+                                if (data == '1') {
+                                    alert('登录成功，将跳转到首页');
+                                    window.location = '/'
+                                } else {
+                                    alert('账号或者密码输入错误，请重新输入');
+
+                                }
                             })
                         })
                     </script>
